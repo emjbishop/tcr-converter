@@ -66,6 +66,7 @@ def load_data(in_file):
 
 def tenx_to_imgt(df, chains):
     '''Convert from 10X to IMGT by adding alleles'''
+    # TODO: Check if allele already exists (check for * in column)
     if chains == 'alpha-beta':
             df['v_a_gene'] = df['v_a_gene'].apply(lambda x: f"{x}*01")
             df['v_b_gene'] = df['v_b_gene'].apply(lambda x: f"{x}*01")
@@ -89,10 +90,10 @@ def tenx_to_imgt(df, chains):
 #   Modifed from tcrdist3   #
 #############################
 
-header_dict = {'alpha':["cdr3_b_aa","v_a_gene", "j_a_gene","cdr3_b_nucseq"], 
-               'beta' :["cdr3_b_aa","v_b_gene","j_b_gene","cdr3_b_nucseq"],
-               'gamma':["cdr3_g_aa","v_g_gene","j_g_gene","cdr3_g_nucseq"],
-               'delta':["cdr3_d_aa","v_d_gene","j_d_gene","cdr3_d_nucseq"]}
+header_dict = {'alpha':["cdr3_b_aa", "v_a_gene", "j_a_gene", "cdr3_b_nucseq"], 
+               'beta' :["cdr3_b_aa", "v_b_gene", "j_b_gene", "cdr3_b_nucseq"],
+               'gamma':["cdr3_g_aa", "v_g_gene", "j_g_gene", "cdr3_g_nucseq"],
+               'delta':["cdr3_d_aa", "v_d_gene", "j_d_gene", "cdr3_d_nucseq"]}
 
 
 def valid_cdr3(cdr3):
