@@ -1,5 +1,6 @@
 # tcr-converter
 
+**NOTE: This tool is under development and is not guaranteed to work at this time.**  
 Convert TCRrep data from 10X, Adaptive, or AIRR format to IMGT. Most of this code was borrowed from [tcrdist3](https://github.com/kmayerb/tcrdist3)
   
 **Adaptive/AIRR**: Can only take single-chain data and won't output all columns by default. Specify extra columns with `--extra`
