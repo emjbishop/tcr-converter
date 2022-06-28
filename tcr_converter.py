@@ -2,29 +2,30 @@ import os
 import argparse
 import pandas as pd
 import numpy as np
+import sys
+from tcrdist.swap_gene_name import adaptive_to_imgt
 
 parser = argparse.ArgumentParser(
-    description = """Convert TCRrep data from 10X, Adaptive, or AIRR format to IMGT.
-    \n**Adaptive/AIRR**: Can only take single-chain data and won't output all columns by default. Specify extra columns with -e/--extra
+    description = """Convert TCRrep data from Adaptive v4 or AIRR format to IMGT.
+    \n**Adaptive/AIRR**: Can only take single-chain data and won't output all columns 
+    by default. Specify extra columns with -e/--extra
     """,
-    usage='%(prog)s [-h HELP] -i INPUT -c CHAINS -o OUTPUT [-f INPUT FORMAT] [-e EXTRA COLUMNS] [-s SPECIES]',
+    usage='%(prog)s [-h HELP] -i INPUT [-c CHAIN] [-o OUTPUT] [-e EXTRA COLUMNS] [-s SPECIES]',
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
 parser.add_argument('-i', '--input', 
                     help='Input TCR filepath', metavar='', type=str, required=True)
-parser.add_argument('-c', '--chains', 
-                    choices=['alpha-beta', 'alpha', 'beta', 'gamma-delta', 'gamma', 'delta'], 
-                    help='Input TCR chain(s). Options are: "alpha-beta", "alpha", "beta", "gamma-delta", "gamma", "delta". Default is "beta"', 
-                    metavar='', type=str, required=True)
+parser.add_argument('-c', '--chain', 
+                    choices=['alpha', 'beta', 'gamma', 'delta'],
+                    default=['beta'],
+                    help='Input TCR chain. Options are: "alpha", "beta", "gamma", "delta". Default is "beta"', 
+                    metavar='', type=str, required=False)
 parser.add_argument('-o', '--output', 
-                    help='Output TCR filepath. Extension should be .tsv', metavar='', type=str, required=True)
-parser.add_argument('-f', '--format',
-                    choices=['10x', 'adaptive', 'airr'],
-                    default='10x',
-                    help='Format of input TCR data. Options are: "10x", "adaptive", "airr". Default is "10x"', metavar='', type=str, required=False)
+                    default='./tcr_converter_out.csv',
+                    help='Output TCR filepath. Extension should be .csv', metavar='', type=str, required=False)
 parser.add_argument('-e', '--extra',
-                    default=[''],
+                    default=[],
                     help='List of extra input Adaptive/AIRR columns to keep in addition to the CDR3/V/J ones', metavar='', type=list, required=False)
 parser.add_argument('-s', '--species', 
                     choices=['human', 'mouse'], 
@@ -36,8 +37,7 @@ args = parser.parse_args()
 
 def main():
     input = args.input
-    chains = args.chains
-    type = args.format
+    chains = args.chain
     outpath = args.output
     extra_columns = args.extra
     organism = args.species
