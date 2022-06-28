@@ -199,7 +199,6 @@ def load_data(in_file):
 
 def tenx_to_imgt(df, chains):
     '''Convert from 10X to IMGT by adding alleles'''
-    # TODO: Check if allele already exists (check for * in column)
     if chains == 'alpha-beta':
             df['v_a_gene'] = df['v_a_gene'].apply(lambda x: f"{x}*01")
             df['v_b_gene'] = df['v_b_gene'].apply(lambda x: f"{x}*01")
@@ -240,12 +239,12 @@ def valid_cdr3(cdr3):
     return valid
 
 
-def adaptive_to_imgt(df, extra_columns, chains, organism):
+def adapt_to_imgt(df, extra_columns, chains, organism):
     '''Convert from Adaptive to IMGT'''
     item_names = header_dict[chains]
     # Parse bio-identity
     ns= {0:"cdr3_aa", 1:"v_gene", 2:"j_gene"}
-    # Expand bio_idenitty column to 3-column cdr3,v,j
+    # Expand bio_identity column to 3-column cdr3,v,j
     new_df = df.copy()
     cdr_v_j = new_df['bio_identity'].str.split("+", expand = True).\
         rename(columns = lambda x: ns[x])
